@@ -18,21 +18,62 @@ $(document).ready(function(e) {
     // Count number of sequential months
     var seqMonths = countSeqMonths(startDate, endDate);
 
-    // Modify datepicker options and show
-    $('#output').datepicker("option", {
-      numberOfMonths: [seqMonths, 1],
-      minDate: startDate,
-      maxDate: endDate
-    }).show();
+    var countryCode = $('#countryCode').val();
+    var holidays = [];
+    $.getJSON("http://holidayapi.com/v1/holidays",
+      {
+        country: countryCode,
+        year: "2008"
+      }, function(response) {
+        $.each(response.holidays, function() {
+          $.each(this, function() {
+            holidays.push(new Date(this.date));
+          });
+        });
+
+        // Modify datepicker options and show
+        $('#output').datepicker("option", {
+          numberOfMonths: [seqMonths, 1],
+          minDate: startDate,
+          maxDate: endDate,
+          // Add holidays
+          beforeShowDay: function (date) {
+            for (var i = 0; i < holidays.length; ++i) {
+              if (date.getMonth() == holidays[i].getMonth()
+                  && date.getDate() == holidays[i].getDate()
+                  && date.getFullYear() == '2008') {
+                  return ([false, 'holiday']);
+              }
+            }
+            return [true, ''];
+          }
+        }).show();
+
+        // Hide all weeks out of range for single month
+        $('#output div table tbody tr').hide();
+        $('#output div table tbody tr').each(function() {
+          if( $(this).children('td').not('.ui-state-disabled').length > 0 ) {
+            $(this).show();
+          }
+        });
+
+        // Hide all weeks out of range for multiple months
+        $('#output div div table tbody tr').hide();
+        $('#output div div table tbody tr').each(function() {
+          if( $(this).children('td').not('.ui-state-disabled').length > 0 ) {
+            $(this).show();
+          }
+        });
+    })
+    .error(function() { alert("Error retrieving holidays!"); })
   });
+
 });
 
 // calcEndDate: Returns end Date object from moment added days
 function calcEndDate(startDate, numberDays) {
   var startMoment = moment(startDate);
-  console.log(startMoment.format());
   var endMoment = moment(startDate).add(numberDays, 'days');
-  console.log(endMoment.format());
   return endMoment.toDate();
 }
 
@@ -51,6 +92,5 @@ function countSeqMonths(startDate, endDate) {
       lastMonth = moment.format('MMYYYY');
     }
   });
-  console.log(seqMonths);
   return seqMonths;
 }

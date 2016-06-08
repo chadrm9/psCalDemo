@@ -2,5 +2,33 @@ label {
   min-width: 140px;
   display: inline-block;
 }
-.datepicker {
+
+/*#3(a) Weekends yellow*/
+.ui-datepicker-week-end a.ui-state-default {
+  background: #FFFFE0 !important;
+}
+
+/*#3.(b) Weekdays green*/
+.ui-state-default {
+    background: #90EE90 !important;
+    color: #222222 !important;
+}
+
+/*#3(c) Holidays orange*/
+.holiday {
+    background: #FFA500 !important;
+}
+
+/*#3(d) Invalid days gray*/
+.ui-state-disabled span.ui-state-default {
+    background: #D3D3D3 !important;
+    color: #D3D3D3 !important;
+}
+
+/*Hide prev, next month buttons*/
+#output.hasDatepicker .ui-datepicker-prev { 
+  display: none; 
+}
+#output.hasDatepicker .ui-datepicker-next { 
+  display: none; 
 }
