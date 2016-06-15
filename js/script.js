@@ -28,7 +28,6 @@ $(document).ready(function(e) {
         $.each(response.holidays, function() {
           $.each(this, function() {
             holidays.push({date: new Date(this.date), name: this.name});
-            console.log(this.date + ' ' + this.name);
           });
         });
 
@@ -43,10 +42,13 @@ $(document).ready(function(e) {
             var holidayMoment, todayMoment;
             for (var i = 0; i < holidays.length; ++i) {
               holidayMoment = moment(holidays[i].date);
+
               // Correct (shift) beforeShowDay
               todayMoment = moment(date).subtract(1, 'day');
               if (holidayMoment.isSame(todayMoment, 'day')) {
-                return [true, 'holiday'];
+                
+                // Attach holiday class and name tooltip
+                return [true, 'holiday', holidays[i].name];
               }
             }
             return [true, ''];
