@@ -26,6 +26,8 @@ $(document).ready(function(e) {
         year: "2008"
       }, function(response) {
         $.each(response.holidays, function() {
+
+          // Build holidays {date, name} array
           $.each(this, function() {
             holidays.push({date: new Date(this.date), name: this.name});
           });
@@ -43,20 +45,24 @@ $(document).ready(function(e) {
             for (var i = 0; i < holidays.length; ++i) {
               holidayMoment = moment(holidays[i].date);
 
-              // Correct (shift) beforeShowDay
+              // Correct (shift) beforeShowDay date, compare
               todayMoment = moment(date).subtract(1, 'day');
               if (holidayMoment.isSame(todayMoment, 'day')) {
-                
+
                 // Attach holiday class and name tooltip
                 return [true, 'holiday', holidays[i].name];
               }
             }
+
+            // Default display
             return [true, ''];
           }
         }).show();
 
         // Hide all weeks out of range for single month
         $('#output div table tbody tr').hide();
+
+        // Show dates in range
         $('#output div table tbody tr').each(function() {
           if( $(this).children('td').not('.ui-state-disabled').length > 0 ) {
             $(this).show();
@@ -65,14 +71,16 @@ $(document).ready(function(e) {
 
         // Hide all weeks out of range for multiple months
         $('#output div div table tbody tr').hide();
+
+        // Show dates in range
         $('#output div div table tbody tr').each(function() {
           if( $(this).children('td').not('.ui-state-disabled').length > 0 ) {
             $(this).show();
           }
         });
     })
-    //Could not retrieve holidays
-    .error(function() { alert("Error retrieving holidays!"); })
+    //Could not resolve holidays
+    .error(function() { alert("Error resolving holidays!"); })
   });
 
 });
