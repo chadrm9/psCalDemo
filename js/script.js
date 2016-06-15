@@ -27,7 +27,8 @@ $(document).ready(function(e) {
       }, function(response) {
         $.each(response.holidays, function() {
           $.each(this, function() {
-            holidays.push(new Date(this.date));
+            holidays.push({date: new Date(this.date), name: this.name});
+            console.log(this.date + ' ' + this.name);
           });
         });
 
@@ -36,13 +37,16 @@ $(document).ready(function(e) {
           numberOfMonths: [seqMonths, 1],
           minDate: startDate,
           maxDate: endDate,
+
           // Add holidays
           beforeShowDay: function (date) {
+            var holidayMoment, todayMoment;
             for (var i = 0; i < holidays.length; ++i) {
-              if (date.getMonth() == holidays[i].getMonth()
-                  && date.getDate() == holidays[i].getDate()
-                  && date.getFullYear() == '2008') {
-                  return ([false, 'holiday']);
+              holidayMoment = moment(holidays[i].date);
+              // Correct (shift) beforeShowDay
+              todayMoment = moment(date).subtract(1, 'day');
+              if (holidayMoment.isSame(todayMoment, 'day')) {
+                return [true, 'holiday'];
               }
             }
             return [true, ''];
@@ -65,6 +69,7 @@ $(document).ready(function(e) {
           }
         });
     })
+    //Could not retrieve holidays
     .error(function() { alert("Error retrieving holidays!"); })
   });
 

@@ -1,7 +1,0 @@
-$(document).ready(function(e) {
-  $('#startDate').datepicker();
-
-  $('form').submit(function( event ) {
-    alert( 'success!' );
-  });
-});

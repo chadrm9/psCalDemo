@@ -14,15 +14,16 @@ label {
     color: #222222 !important;
 }
 
-/*#3(c) Holidays orange*/
-.holiday {
-    background: #FFA500 !important;
-}
-
 /*#3(d) Invalid days gray*/
 .ui-state-disabled span.ui-state-default {
     background: #D3D3D3 !important;
     color: #D3D3D3 !important;
+}
+
+/*#3(c) Holidays orange*/
+.holiday a.ui-state-default{
+    background: #FFA500 !important;
+    color: #222222 !important;
 }
 
 /*Hide prev, next month buttons*/
